@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Administrative · Application Test Platform{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <h1>Administrative dashboard</h1>
+    <p>
+        Welcome, {{ request.user.get_username }}.
+        This area is reserved for staff who manage question banks,
+        applicant tests, and review submissions.
+    </p>
+    <ul>
+        <li><a href="#">Question bank</a> <em>(coming soon)</em></li>
+        <li><a href="#">Tests</a> <em>(coming soon)</em></li>
+        <li><a href="#">Submissions</a> <em>(coming soon)</em></li>
+    </ul>
+</section>
+{% endblock %}

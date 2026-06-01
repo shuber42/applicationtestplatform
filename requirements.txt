@@ -1,0 +1,5 @@
+# Django
+Django>=5.0,<6.0
+
+# Environment variables (optional but recommended)
+python-dotenv>=1.0

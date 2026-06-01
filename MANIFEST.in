@@ -1,0 +1,9 @@
+include LICENSE.md
+include README.md
+include CHANGELOG.md
+recursive-include applicationtestplatform *.py
+recursive-include administrative *.py
+recursive-include applicants *.py
+recursive-include templates *.html
+recursive-include static *
+recursive-include docs *
