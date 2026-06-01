@@ -69,3 +69,6 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local artifacts (handoff bundles, scratch files, etc.)
+.paperclip-artifacts/
