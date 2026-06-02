@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     # Project apps
     "administrative",
     "applicants",
+    "mailroom",
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,46 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ADMIN_SITE_URL = "django-admin/"
 ADMINISTRATIVE_URL_PREFIX = "manage/"
 APPLICANTS_URL_PREFIX = ""  # applicant-facing pages live at the site root
+
+
+# ---------------------------------------------------------------------------
+# Mail integration (outbound SMTP + inbound IMAP)
+# ---------------------------------------------------------------------------
+# Outbound mail uses Django's standard ``django.core.mail`` machinery so
+# any ``EMAIL_BACKEND`` (SMTP, console, in-memory) drops in cleanly. In
+# DEBUG we fall back to the console backend so a fresh checkout never
+# needs an SMTP server to render mail templates.
+#
+# Inbound mail is pulled from an IMAP mailbox by the
+# ``python manage.py fetch_mail`` management command. The settings
+# below are read directly by ``mailroom.services.imap_client``.
+
+EMAIL_BACKEND = os.environ.get(
+    "DJANGO_EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+    if DEBUG
+    else "django.core.mail.backends.smtp.EmailBackend",
+)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587") or 0)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "1") == "1"
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "0") == "1"
+EMAIL_TIMEOUT = int(os.environ.get("EMAIL_TIMEOUT", "30"))
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL", "Application Test Platform <noreply@localhost>"
+)
+SERVER_EMAIL = os.environ.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+
+# Inbound IMAP
+IMAP_HOST = os.environ.get("IMAP_HOST", "")
+IMAP_PORT = int(os.environ.get("IMAP_PORT", "993") or 0)
+IMAP_USERNAME = os.environ.get("IMAP_USERNAME", "")
+IMAP_PASSWORD = os.environ.get("IMAP_PASSWORD", "")
+IMAP_USE_SSL = os.environ.get("IMAP_USE_SSL", "1") == "1"
+IMAP_MAILBOX = os.environ.get("IMAP_MAILBOX", "INBOX")
+
+# Optional: domain to use when minting outbound Message-IDs. When empty
+# Python's ``email.utils.make_msgid`` picks the local hostname.
+MAIL_MESSAGE_ID_DOMAIN = os.environ.get("MAIL_MESSAGE_ID_DOMAIN", "") or None
