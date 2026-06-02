@@ -81,3 +81,136 @@ h1 {
 .button:hover {
     opacity: 0.9;
 }
+
+/* Data tables (applicant list, template list, mail history) */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: #ffffff;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+}
+
+.data-table thead th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+
+/* Dashboard stat cards */
+.dashboard-stats {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+}
+
+.dashboard-stats li {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    min-width: 8rem;
+}
+
+.dashboard-stats strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--color-accent);
+}
+
+/* Flash messages */
+.flash {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.flash li {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    background: #ecfeff;
+    border: 1px solid #a5f3fc;
+}
+
+.flash-error,
+.flash-danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.flash-success {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+/* Mail thread/body */
+.mail-body,
+.mail-body-preview,
+.mail-error,
+.applicant-notes {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem;
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+.mail-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.mail-thread {
+    list-style: none;
+    padding: 0;
+}
+
+.mail-thread-item {
+    border-left: 3px solid var(--color-border);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    background: #ffffff;
+    border-radius: 0 6px 6px 0;
+}
+
+.mail-thread-out {
+    border-left-color: var(--color-accent);
+}
+
+.mail-thread-in {
+    border-left-color: #16a34a;
+}
+
+.message-meta {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+}
+
+.message-meta dt {
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.message-meta dd {
+    margin: 0 0 0.5rem 1rem;
+    color: var(--color-muted);
+}
+
+.filters a.active {
+    font-weight: 600;
+    text-decoration: underline;
+}

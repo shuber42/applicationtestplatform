@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ mail_message.subject|default:"(no subject)" }} · Mail{% endblock %}
+
+{% block content %}
+<section class="message-detail">
+    <p><a href="{% url 'administrative:message_list' %}">&larr; Mail history</a></p>
+
+    <h1>{{ mail_message.subject|default:"(no subject)" }}</h1>
+
+    <dl class="message-meta">
+        <dt>Direction</dt><dd>{{ mail_message.get_direction_display }}</dd>
+        <dt>Status</dt><dd>{{ mail_message.get_status_display }}</dd>
+        <dt>From</dt><dd>{{ mail_message.from_address }}</dd>
+        <dt>To</dt><dd>{{ mail_message.to_address }}</dd>
+        {% if mail_message.applicant %}
+        <dt>Applicant</dt>
+        <dd><a href="{% url 'administrative:applicant_detail' pk=mail_message.applicant.pk %}">{{ mail_message.applicant.name }}</a></dd>
+        {% endif %}
+        {% if mail_message.template %}
+        <dt>Template</dt><dd>{{ mail_message.template.name }} ({{ mail_message.template.slug }})</dd>
+        {% endif %}
+        {% if mail_message.message_id %}
+        <dt>Message-ID</dt><dd><code>{{ mail_message.message_id }}</code></dd>
+        {% endif %}
+        {% if mail_message.in_reply_to %}
+        <dt>In-Reply-To</dt><dd><code>{{ mail_message.in_reply_to }}</code></dd>
+        {% endif %}
+        {% if mail_message.sent_at %}
+        <dt>Sent at</dt><dd>{{ mail_message.sent_at|date:"Y-m-d H:i:s" }}</dd>
+        {% endif %}
+        {% if mail_message.received_at %}
+        <dt>Received at</dt><dd>{{ mail_message.received_at|date:"Y-m-d H:i:s" }}</dd>
+        {% endif %}
+    </dl>
+
+    {% if mail_message.error %}
+    <h2>Error</h2>
+    <pre class="mail-error">{{ mail_message.error }}</pre>
+    {% endif %}
+
+    <h2>Body</h2>
+    <pre class="mail-body">{{ mail_message.body }}</pre>
+</section>
+{% endblock %}

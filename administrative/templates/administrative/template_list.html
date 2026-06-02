@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Mail templates · Administrative{% endblock %}
+
+{% block content %}
+<section class="template-list">
+    <h1>Mail templates</h1>
+    <p>
+        Templates let you quickly send the same message to many
+        applicants. Use Django template syntax for variables — for
+        example {% verbatim %}<code>Hello {{ applicant.name }}</code>{% endverbatim %}.
+    </p>
+    <p>
+        <a class="button" href="{% url 'administrative:template_create' %}">New template</a>
+    </p>
+    {% if templates %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Active</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for template in templates %}
+            <tr>
+                <td>{{ template.name }}</td>
+                <td><code>{{ template.slug }}</code></td>
+                <td>{% if template.is_active %}Yes{% else %}No{% endif %}</td>
+                <td>{{ template.updated_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{% url 'administrative:template_update' pk=template.pk %}">Edit</a>
+                    ·
+                    <a href="{% url 'administrative:mail_send' %}?template={{ template.pk }}">Send</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p><em>No templates yet. Create one to get started.</em></p>
+    {% endif %}
+</section>
+{% endblock %}

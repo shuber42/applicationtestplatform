@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if mode == "create" %}New mail template{% else %}Edit mail template{% endif %}
+· Administrative
+{% endblock %}
+
+{% block content %}
+<section class="template-form">
+    <h1>
+        {% if mode == "create" %}New mail template{% else %}Edit mail template{% endif %}
+    </h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type="submit" class="button">Save template</button>
+            <a href="{% url 'administrative:template_list' %}">Cancel</a>
+        </p>
+    </form>
+</section>
+{% endblock %}

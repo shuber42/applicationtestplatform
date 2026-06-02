@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Send mail · Administrative{% endblock %}
+
+{% block content %}
+<section class="mail-send">
+    <h1>Send mail</h1>
+    <p>Pick a template and an applicant. The template is rendered against the applicant before sending.</p>
+
+    {% if messages %}
+    <ul class="flash">
+        {% for m in messages %}<li class="flash-{{ m.tags }}">{{ m }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type="submit" class="button">Send</button>
+            <a href="{% url 'administrative:dashboard' %}">Cancel</a>
+        </p>
+    </form>
+</section>
+{% endblock %}

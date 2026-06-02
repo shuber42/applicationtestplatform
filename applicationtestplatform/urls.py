@@ -7,11 +7,10 @@ The project exposes two distinct frontends:
 * ``/``              - the applicant-facing ``applicants`` app
 """
 
-from django.contrib import admin
-from django.urls import include, path
-
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
     path(settings.ADMIN_SITE_URL, admin.site.urls),

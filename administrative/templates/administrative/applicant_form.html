@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if mode == "create" %}Add applicant{% else %}Edit applicant{% endif %}
+· Administrative
+{% endblock %}
+
+{% block content %}
+<section class="applicant-form">
+    <h1>
+        {% if mode == "create" %}Add an applicant{% else %}Edit applicant{% endif %}
+    </h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type="submit" class="button">Save</button>
+            <a href="{% url 'administrative:applicant_list' %}">Cancel</a>
+        </p>
+    </form>
+</section>
+{% endblock %}

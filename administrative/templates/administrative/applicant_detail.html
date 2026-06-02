@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ applicant.name }} · Applicants{% endblock %}
+
+{% block content %}
+<section class="applicant-detail">
+    <p><a href="{% url 'administrative:applicant_list' %}">&larr; All applicants</a></p>
+
+    <h1>{{ applicant.name }}</h1>
+    <p>
+        <strong>Email:</strong> <a href="mailto:{{ applicant.email }}">{{ applicant.email }}</a><br>
+        <strong>Added:</strong> {{ applicant.created_at|date:"Y-m-d H:i" }}
+    </p>
+
+    {% if applicant.notes %}
+    <h2>Notes</h2>
+    <pre class="applicant-notes">{{ applicant.notes }}</pre>
+    {% endif %}
+
+    <p>
+        <a class="button" href="{% url 'administrative:mail_send' %}?applicant={{ applicant.pk }}">Send mail to this applicant</a>
+        <a href="{% url 'administrative:applicant_update' pk=applicant.pk %}">Edit details</a>
+    </p>
+
+    <h2>Mail thread</h2>
+    {% if messages_ %}
+    <ul class="mail-thread">
+        {% for message in messages_ %}
+        <li class="mail-thread-item mail-thread-{{ message.direction }}">
+            <p>
+                <strong>
+                    {% if message.direction == "out" %}→ Sent{% else %}← Received{% endif %}
+                </strong>
+                <small>{{ message.created_at|date:"Y-m-d H:i" }}</small>
+                {% if message.template %}<small>(template: {{ message.template.name }})</small>{% endif %}
+                — <a href="{% url 'administrative:message_detail' pk=message.pk %}">view</a>
+            </p>
+            <p class="mail-subject"><strong>{{ message.subject }}</strong></p>
+            <pre class="mail-body-preview">{{ message.body|truncatechars:240 }}</pre>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p><em>No mail sent to or received from this applicant yet.</em></p>
+    {% endif %}
+</section>
+{% endblock %}

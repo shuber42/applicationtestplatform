@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Applicants · Administrative{% endblock %}
+
+{% block content %}
+<section class="applicant-list">
+    <h1>Applicants</h1>
+    <p>
+        <a class="button" href="{% url 'administrative:applicant_create' %}">Add an applicant</a>
+    </p>
+    {% if applicants %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Added</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for applicant in applicants %}
+            <tr>
+                <td><a href="{% url 'administrative:applicant_detail' pk=applicant.pk %}">{{ applicant.name }}</a></td>
+                <td>{{ applicant.email }}</td>
+                <td>{{ applicant.created_at|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="{% url 'administrative:applicant_update' pk=applicant.pk %}">Edit</a>
+                    ·
+                    <a href="{% url 'administrative:mail_send' %}?applicant={{ applicant.pk }}">Send mail</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p><em>No applicants yet.</em></p>
+    {% endif %}
+</section>
+{% endblock %}

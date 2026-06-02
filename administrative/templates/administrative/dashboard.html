@@ -7,13 +7,35 @@
     <h1>Administrative dashboard</h1>
     <p>
         Welcome, {{ request.user.get_username }}.
-        This area is reserved for staff who manage question banks,
-        applicant tests, and review submissions.
+        This area is reserved for staff who manage applicants,
+        question banks, mail templates, and review submissions.
     </p>
+
+    <ul class="dashboard-stats">
+        <li><strong>{{ applicant_count }}</strong> applicants</li>
+        <li><strong>{{ template_count }}</strong> mail templates</li>
+        <li><strong>{{ outbound_count }}</strong> outbound mails</li>
+        <li><strong>{{ inbound_count }}</strong> inbound mails</li>
+    </ul>
+
+    <h2>Applicants</h2>
     <ul>
-        <li><a href="#">Question bank</a> <em>(coming soon)</em></li>
-        <li><a href="#">Tests</a> <em>(coming soon)</em></li>
-        <li><a href="#">Submissions</a> <em>(coming soon)</em></li>
+        <li><a href="{% url 'administrative:applicant_list' %}">All applicants</a></li>
+        <li><a href="{% url 'administrative:applicant_create' %}">Add an applicant</a></li>
+    </ul>
+
+    <h2>Mail</h2>
+    <ul>
+        <li><a href="{% url 'administrative:template_list' %}">Mail templates</a></li>
+        <li><a href="{% url 'administrative:mail_send' %}">Send a mail</a></li>
+        <li><a href="{% url 'administrative:message_list' %}">Mail history</a></li>
+    </ul>
+
+    <h2>Tests <em>(coming soon)</em></h2>
+    <ul>
+        <li>Question bank</li>
+        <li>Tests</li>
+        <li>Submissions</li>
     </ul>
 </section>
 {% endblock %}

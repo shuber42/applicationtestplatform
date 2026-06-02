@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Mail history · Administrative{% endblock %}
+
+{% block content %}
+<section class="message-list">
+    <h1>Mail history</h1>
+
+    <nav class="filters">
+        <a href="{% url 'administrative:message_list' %}"{% if not filter_direction %} class="active"{% endif %}>All</a>
+        ·
+        <a href="?direction=out"{% if filter_direction == "out" %} class="active"{% endif %}>Sent</a>
+        ·
+        <a href="?direction=in"{% if filter_direction == "in" %} class="active"{% endif %}>Received</a>
+    </nav>
+
+    {% if mail_messages %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Direction</th>
+                <th>Status</th>
+                <th>Subject</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Applicant</th>
+                <th>When</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in mail_messages %}
+            <tr class="row-{{ m.direction }} status-{{ m.status }}">
+                <td>{{ m.get_direction_display }}</td>
+                <td>{{ m.get_status_display }}</td>
+                <td><a href="{% url 'administrative:message_detail' pk=m.pk %}">{{ m.subject|default:"(no subject)" }}</a></td>
+                <td>{{ m.from_address }}</td>
+                <td>{{ m.to_address }}</td>
+                <td>
+                    {% if m.applicant %}
+                    <a href="{% url 'administrative:applicant_detail' pk=m.applicant.pk %}">{{ m.applicant.name }}</a>
+                    {% else %}<em>—</em>{% endif %}
+                </td>
+                <td>{{ m.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p><em>No messages yet.</em></p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -19,7 +19,7 @@ from __future__ import annotations
 import email
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timezone as dt_timezone
+from datetime import UTC, datetime
 from email import policy
 from email.message import EmailMessage as StdlibEmailMessage
 from email.utils import getaddresses, parsedate_to_datetime
@@ -123,7 +123,7 @@ def parse_inbound(raw: bytes | str) -> ParsedInboundMessage:
         except (TypeError, ValueError):
             received_at = None
     if received_at and received_at.tzinfo is None:
-        received_at = received_at.replace(tzinfo=dt_timezone.utc)
+        received_at = received_at.replace(tzinfo=UTC)
 
     return ParsedInboundMessage(
         from_address=from_address,

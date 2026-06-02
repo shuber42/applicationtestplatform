@@ -52,7 +52,7 @@ exclude = ["tests*", "docs*", "scripts*"]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "applicationtestplatform.settings"
 python_files = ["test_*.py", "*_test.py", "tests.py"]
-testpaths = ["administrative", "applicants"]
+testpaths = ["administrative", "applicants", "mailroom"]
 addopts = "-ra"
 
 [tool.ruff]
