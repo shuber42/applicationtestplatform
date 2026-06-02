@@ -18,3 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI workflow (`.github/workflows/ci.yml`)
 - Smoke tests for both apps
 - Base template and minimal landing pages for the administrative and applicant frontends
+- `Applicant` model with admin registration and migration
+- New `mailroom` Django app providing:
+  - `MailTemplate` model with Django-template rendering (`{{ applicant.name }}` etc.)
+  - `MailMessage` audit model for inbound and outbound mail
+  - `send_template_to_applicant` service backed by `django.core.mail`
+  - `parse_inbound` / `ingest_inbound_message` parser for raw RFC 5322 bytes
+  - `imap_client` minimal IMAP transport (stdlib `imaplib`)
+  - `send_mail_template` and `fetch_mail` management commands
+  - Django admin registrations for `MailTemplate` and `MailMessage`
+- Staff-only administrative views for applicants, mail templates, sending mail,
+  and reviewing inbound/outbound mail history
+- Env-driven SMTP outbound (console backend default in DEBUG) and IMAP inbound
+  configuration, documented in `.env.example`

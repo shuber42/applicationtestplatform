@@ -2,7 +2,8 @@
 
 A Django web application that lets **applicants** answer questions and submit
 **predefined** and/or **free-text** responses, and lets **administrators**
-author question banks, schedule tests, and review submissions.
+author question banks, schedule tests, send mail to applicants, and review
+submissions.
 
 The application exposes two clearly separated frontends:
 
@@ -11,6 +12,10 @@ The application exposes two clearly separated frontends:
 | `/`            | Applicants    | `applicants`     |
 | `/manage/`     | Administrators| `administrative` |
 | `/django-admin/` | Django staff | (built-in)       |
+
+A dedicated `mailroom` app handles all mail traffic — outbound sends through
+Django's `EMAIL_BACKEND` and inbound ingest from IMAP via the
+`fetch_mail` management command.
 
 ## Project structure
 
@@ -27,11 +32,12 @@ applicationtestplatform/
 │   ├── templates/administrative/
 │   ├── admin.py
 │   ├── apps.py
+│   ├── forms.py
 │   ├── models.py
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
-├── applicants/                # Django app: applicant-facing views
+├── applicants/                # Django app: applicant-facing views + Applicant model
 │   ├── migrations/
 │   ├── templates/applicants/
 │   ├── admin.py
@@ -40,6 +46,14 @@ applicationtestplatform/
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
+├── mailroom/                  # Django app: mail templates + send/receive
+│   ├── management/commands/   # send_mail_template, fetch_mail
+│   ├── migrations/
+│   ├── services/              # sender, fetcher (parser), imap_client
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py              # MailTemplate, MailMessage
+│   └── tests.py
 ├── static/                    # Project-wide static assets
 │   └── css/site.css
 ├── templates/                 # Project-wide templates
@@ -117,6 +131,33 @@ Common tasks are exposed via the `Makefile`:
 | `make format`    | Auto-format the codebase (ruff)       |
 | `make check`     | Run Django's system checks            |
 | `make clean`     | Remove build / cache artifacts        |
+
+## Mail integration
+
+Outbound and inbound mail are handled by the `mailroom` app.
+
+* **Templates.** Author re-usable `MailTemplate` records in
+  `/manage/mail/templates/` or the Django admin. Subject and body use
+  the Django template engine, so you can write things like
+  `Hello {{ applicant.name }}` and the template is rendered against the
+  addressed applicant at send time.
+* **Sending.** From the administrative UI, pick a template and an
+  applicant on `/manage/mail/send/`. From the CLI, run
+  `python manage.py send_mail_template <slug> <applicant-email>`. Both
+  paths persist a `MailMessage` audit row and use Django's
+  `EMAIL_BACKEND` for transport.
+* **Receiving.** Configure the `IMAP_*` env vars from
+  [`.env.example`](.env.example) and run `python manage.py fetch_mail`
+  (typically on a cron / systemd timer). The command pulls UNSEEN
+  messages, parses them, links them back to applicants by `From:`
+  address, and stores them as inbound `MailMessage` rows.
+* **History.** `/manage/mail/messages/` lists every sent and received
+  message. Each applicant detail page (`/manage/applicants/<id>/`)
+  shows the per-applicant thread.
+
+When `DJANGO_DEBUG=1` the outbound backend defaults to
+`django.core.mail.backends.console.EmailBackend`, so a fresh checkout
+can render and "send" mail without an SMTP server.
 
 ## License
 
