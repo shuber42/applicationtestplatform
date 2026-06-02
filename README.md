@@ -161,5 +161,4 @@ can render and "send" mail without an SMTP server.
 
 ## License
 
-This project is licensed under the Apache License, Version 2.0 — see
-[`LICENSE.md`](LICENSE.md) for the full text.
+MIT &copy; 2025 [DATAJOB - a bit ahead](https://github.com/shuber42/applicationtestplatform)
